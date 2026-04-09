@@ -38,6 +38,15 @@ const ExpenseSchema = new mongoose.Schema({
         maxLength: 200,
         trim: true
     },
+    isRecurring: {
+        type: Boolean,
+        default: false
+    },
+    frequency: {
+        type: String,
+        enum: ['none', 'daily', 'weekly', 'monthly', 'yearly'],
+        default: 'none'
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Expense', ExpenseSchema);

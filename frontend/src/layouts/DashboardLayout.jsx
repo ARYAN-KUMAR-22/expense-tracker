@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, LineChart, WalletCards, ArrowRightLeft, LogOut } from 'lucide-react';
+import { Home, LineChart, WalletCards, ArrowRightLeft, LogOut, Moon, Sun } from 'lucide-react';
 import Dashboard from '../components/Dashboard/Dashboard';
 import Form from '../components/Form/Form';
 import { useGlobalContext } from '../context/globalContext';
@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const DashboardLayout = () => {
   const [activeComponent, setActiveComponent] = useState('Dashboard');
-  const { getIncomes, getExpenses, user, setUser } = useGlobalContext();
+  const { getIncomes, getExpenses, user, setUser, theme, toggleTheme } = useGlobalContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,9 +59,14 @@ const DashboardLayout = () => {
             <ArrowRightLeft /> Expenses
           </li>
         </ul>
-        <button onClick={handleLogout} className="btn" style={{ background: 'var(--danger)' }}>
-            <LogOut /> Logout
-        </button>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+            <button onClick={toggleTheme} className="btn" style={{ flex: 1, background: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}>
+                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+            <button onClick={handleLogout} className="btn" style={{ flex: 1, background: 'var(--danger)' }}>
+                <LogOut size={20} />
+            </button>
+        </div>
       </nav>
 
       {/* Main Content Area */}

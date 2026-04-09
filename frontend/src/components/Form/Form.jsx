@@ -11,12 +11,14 @@ const Form = ({ type }) => {
         date: '',
         category: '',
         description: '',
+        isRecurring: false,
+        frequency: 'none'
     });
 
     const isExpense = type === 'expense';
     const dataList = isExpense ? expenses : incomes;
 
-    const { title, amount, date, category, description } = inputState;
+    const { title, amount, date, category, description, isRecurring, frequency } = inputState;
 
     const handleInput = name => e => {
         setInputState({...inputState, [name]: e.target.value})
@@ -35,6 +37,8 @@ const Form = ({ type }) => {
             date: '',
             category: '',
             description: '',
+            isRecurring: false,
+            frequency: 'none'
         })
     };
 
@@ -79,6 +83,33 @@ const Form = ({ type }) => {
                     <div className="input-control">
                         <textarea name="description" value={description} placeholder="Description" id="description" cols="30" rows="3" onChange={handleInput('description')} required></textarea>
                     </div>
+                    
+                    {isExpense && (
+                        <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
+                                <input 
+                                   type="checkbox" 
+                                   name="isRecurring" 
+                                   checked={isRecurring} 
+                                   onChange={(e) => setInputState({...inputState, isRecurring: e.target.checked})} 
+                                />
+                                Recurring Expense?
+                            </label>
+                            
+                            {isRecurring && (
+                                <div className="selects input-control" style={{ flex: 1 }}>
+                                    <select required value={frequency} name="frequency" id="frequency" onChange={handleInput('frequency')}>
+                                        <option value="none" disabled>Select Frequency</option>
+                                        <option value="daily">Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                        <option value="yearly">Yearly</option>
+                                    </select>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     <button type="submit" className="btn" style={{ marginTop: '1rem' }}>
                         Add {type}
                     </button>

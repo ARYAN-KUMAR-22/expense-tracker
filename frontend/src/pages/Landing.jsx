@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { WalletCards, ShieldCheck, PieChart, DownloadCloud, ArrowRight, Github } from 'lucide-react';
+import { WalletCards, ShieldCheck, PieChart, DownloadCloud, ArrowRight, Code, Moon, Sun } from 'lucide-react';
+import { useGlobalContext } from '../context/globalContext';
 
 const Landing = () => {
     const navigate = useNavigate();
+    const { theme, toggleTheme } = useGlobalContext();
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--bg-dark)' }}>
@@ -17,7 +19,10 @@ const Landing = () => {
                 <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
                     <a href="#features" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: '500', transition: '0.3s' }} className="nav-link">Features</a>
                     <a href="#about" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: '500', transition: '0.3s' }} className="nav-link">About Us</a>
-                    <button className="btn" onClick={() => navigate('/login')} style={{ background: 'transparent', border: '1px solid var(--primary)' }}>Login</button>
+                    <button onClick={toggleTheme} style={{ color: 'var(--text-primary)', display: 'flex', alignItems: 'center' }}>
+                         {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
+                    <button className="btn" onClick={() => navigate('/login')} style={{ background: 'transparent', border: '1px solid var(--primary)', color: 'var(--text-primary)' }}>Login</button>
                     <button className="btn" onClick={() => navigate('/register')}>Get Started</button>
                 </div>
             </nav>
@@ -36,7 +41,7 @@ const Landing = () => {
                     <button className="btn" onClick={() => navigate('/register')} style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>
                         Start Tracking Free <ArrowRight size={20} />
                     </button>
-                    <button className="btn" onClick={() => navigate('/login')} style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', color: 'white' }}>
+                    <button className="btn" onClick={() => navigate('/login')} style={{ padding: '1rem 2.5rem', fontSize: '1.1rem', background: 'transparent', border: '2px solid var(--primary)', color: 'var(--text-primary)' }}>
                         View Demo
                     </button>
                 </div>
@@ -110,7 +115,7 @@ const Landing = () => {
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>ExpanseTracker</h3>
                     </div>
                     <div style={{ display: 'flex', gap: '1.5rem' }}>
-                        <a href="#" style={{ color: 'var(--text-secondary)', transition: 'color 0.2s' }}><Github /></a>
+                        <a href="#" style={{ color: 'var(--text-secondary)', transition: 'color 0.2s' }}><Code /></a>
                     </div>
                 </div>
                 <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '2rem', display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>

@@ -8,8 +8,19 @@ const GlobalContext = React.createContext();
 export const GlobalProvider = ({ children }) => {
     const [incomes, setIncomes] = useState([]);
     const [expenses, setExpenses] = useState([]);
+    const [budgets, setBudgets] = useState([]);
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+    React.useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+    };
 
     // Setup Axios Interceptor for Auth
     axios.interceptors.request.use(
@@ -65,17 +76,51 @@ export const GlobalProvider = ({ children }) => {
     };
 
     const totalExpense = () => {
-        return expenses.reduce((acc, curr) => acc + curr.amount, 0);
-    };
+        let totalExpense = 0;
+        expenses.forEach((expense) => {
+            totalExpense = totalExpense + expense.amount;
+        })
+        return totalExpense;
+    }
 
     const totalBalance = () => {
-        return totalIncome() - totalExpense();
-    };
+        return totalIncome() - totalExpense()
+    }
 
     const transactionHistory = () => {
-        const history = [...incomes, ...expenses];
-        history.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        return history.slice(0, 5);
+        const history = [...incomes, ...expenses]
+        history.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt)
+        })
+        return history.slice(0, 5)
+    }
+
+    // Budgets
+    const addBudget = async (budget) => {
+        try {
+            await axios.post(`${BASE_URL}add-budget`, budget);
+            getBudgets();
+        } catch (err) {
+            setError(err.response?.data?.message || err.message);
+        }
+    }
+
+    const getBudgets = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}get-budgets`);
+            setBudgets(response.data);
+        } catch (err) {
+            setError(err.response?.data?.message || err.message);
+        }
+    }
+
+    const deleteBudget = async (id) => {
+        try {
+            await axios.delete(`${BASE_URL}delete-budget/${id}`);
+            getBudgets();
+        } catch (err) {
+            setError(err.response?.data?.message || err.message);
+        }
     };
 
     return (
@@ -95,7 +140,13 @@ export const GlobalProvider = ({ children }) => {
             error,
             setError,
             user,
-            setUser
+            setUser,
+            theme,
+            toggleTheme,
+            budgets,
+            addBudget,
+            getBudgets,
+            deleteBudget
         }}>
             {children}
         </GlobalContext.Provider>

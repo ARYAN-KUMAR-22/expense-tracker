@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { addExpense, getExpenses, deleteExpense } = require('../controllers/expense');
 const { addIncome, getIncomes, deleteIncome } = require('../controllers/income');
+const { addBudget, getBudgets, deleteBudget } = require('../controllers/budget');
 const { protect, authorize } = require('../middleware/auth');
 
 const { exportCSV } = require('../controllers/dataExport');
@@ -11,6 +12,9 @@ router.get('/export-csv', protect, exportCSV)
     .delete('/delete-income/:id', protect, deleteIncome)
     .post('/add-expense', protect, addExpense)
     .get('/get-expenses', protect, getExpenses)
-    .delete('/delete-expense/:id', protect, deleteExpense);
+    .delete('/delete-expense/:id', protect, deleteExpense)
+    .post('/add-budget', protect, addBudget)
+    .get('/get-budgets', protect, getBudgets)
+    .delete('/delete-budget/:id', protect, deleteBudget);
 
 module.exports = router;
